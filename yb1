@@ -1,0 +1,37 @@
+// ==UserScript==
+// @name         YandexInputSearch
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  try to take over the world!
+// @author       You
+// @match        https://yandex.ru/*
+// @grant        none
+// ==/UserScript==
+let yandexInput = document.getElementsByName("text")[0];
+let searchbutton = document.querySelectorAll("span.button__text")[0];
+let keywords = ["Гобой","Саксофон","Валторна","Фагот","Скрипка","Флейта","Как звучит флейта"];
+let keyword = keywords[getRandom(0,keywords.length)];
+let i = 0;
+function getRandom(min,max){
+    return Math.floor(Math.random()*(max-min)+min);
+}
+if (searchbutton!=undefined){
+    let timerId = setInterval(()=>{
+        yandexInput.value += keyword[i++];
+        if (i==keyword.length){
+            clearInterval(timerId);
+            document.querySelectorAll("span.button__text")[0].click();
+        }
+    },1000);
+}else{
+    let links = document.links;
+    let flag = true;
+    let numPage = document.querySelector("div.pager__items").innerText;
+    for(let i=0; i<links.length; i++){
+        if(links[i].href.indexOf("xn----7sbab5aqcbiddtdj1e1g.xn--p1ai") != -1){
+            setTimeout(()=>links[i].click(),2000);
+            flag=false;
+            break;
+        }
+    }
+}
